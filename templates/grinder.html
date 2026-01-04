@@ -1,0 +1,63 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Website Grinder – Victory AI{% endblock %}
+
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-8">Website Grinder</h2>
+
+<div class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+  <p class="text-slate-400 mb-6">
+    Analyze your website for SEO issues, performance problems, and conversion optimization opportunities.
+  </p>
+  
+  <form method="post" action="/grinder" class="space-y-4">
+    <div>
+      <label class="block text-sm text-slate-400 mb-2">Website URL</label>
+      <input type="url" name="url" 
+             placeholder="https://example.com" 
+             required
+             class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <button type="submit" 
+            class="w-full bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg font-semibold">
+      🔍 Analyze Website
+    </button>
+  </form>
+</div>
+
+<div class="mt-8 bg-slate-900 rounded-xl p-6 border border-slate-800">
+  <h3 class="text-lg font-semibold mb-4">What We Analyze</h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+    <div class="flex items-start gap-3">
+      <span class="text-indigo-400">✓</span>
+      <div>
+        <p class="font-semibold">Page Load Speed</p>
+        <p class="text-slate-400">Measure and optimize loading times</p>
+      </div>
+    </div>
+    <div class="flex items-start gap-3">
+      <span class="text-indigo-400">✓</span>
+      <div>
+        <p class="font-semibold">SEO Elements</p>
+        <p class="text-slate-400">Title tags, meta descriptions, H1 tags</p>
+      </div>
+    </div>
+    <div class="flex items-start gap-3">
+      <span class="text-indigo-400">✓</span>
+      <div>
+        <p class="font-semibold">Accessibility</p>
+        <p class="text-slate-400">Image alt tags and semantic HTML</p>
+      </div>
+    </div>
+    <div class="flex items-start gap-3">
+      <span class="text-indigo-400">✓</span>
+      <div>
+        <p class="font-semibold">Overall Score</p>
+        <p class="text-slate-400">Comprehensive website health score</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

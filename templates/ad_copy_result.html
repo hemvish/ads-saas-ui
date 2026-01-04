@@ -1,0 +1,47 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Ad Copy Generated – Victory AI{% endblock %}
+
+{% block content %}
+
+<div class="mb-6">
+  <a href="/ai-insights" class="text-indigo-400 hover:text-indigo-300 text-sm">← Back to AI Insights</a>
+</div>
+
+<h2 class="text-2xl font-bold mb-8">Generated Ad Copy</h2>
+
+<div class="bg-slate-900 rounded-xl p-6 mb-6 border border-slate-800">
+  <div class="grid grid-cols-3 gap-4 text-sm mb-6">
+    <div>
+      <span class="text-slate-500">Website:</span>
+      <span class="text-slate-300 ml-2">{{ website }}</span>
+    </div>
+    <div>
+      <span class="text-slate-500">Product:</span>
+      <span class="text-slate-300 ml-2">{{ product }}</span>
+    </div>
+    <div>
+      <span class="text-slate-500">Budget:</span>
+      <span class="text-slate-300 ml-2">{{ budget }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+  <h3 class="text-lg font-semibold mb-4">AI Generated Content</h3>
+  <div class="prose prose-invert max-w-none">
+    <pre class="bg-slate-950 p-6 rounded-lg text-sm whitespace-pre-wrap text-slate-300">{{ result }}</pre>
+  </div>
+</div>
+
+<div class="mt-6 flex gap-4">
+  <a href="/ai-insights" class="bg-indigo-600 hover:bg-indigo-700 px-6 py-2 rounded-lg font-semibold">
+    Generate Another
+  </a>
+  <a href="/reports" class="bg-slate-700 hover:bg-slate-600 px-6 py-2 rounded-lg font-semibold">
+    View All Reports
+  </a>
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard – Victory AI{% endblock %}
+
+{% block page_title %}Marketing Dashboard{% endblock %}
+
+{% block header_actions %}
+<a href="/ads-ai" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]">
+  Generate Ads
+</a>
+{% endblock %}
+
+{% block content %}
+
+<!-- Metrics Overview -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-colors">
+    <div class="text-sm text-gray-400 mb-2">Total Analyses</div>
+    <div class="text-3xl font-bold text-purple-400 mb-1">0</div>
+    <div class="text-sm text-gray-500">Ready to analyze</div>
+  </div>
+  
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-colors">
+    <div class="text-sm text-gray-400 mb-2">Ads Generated</div>
+    <div class="text-3xl font-bold text-blue-400 mb-1">0</div>
+    <div class="text-sm text-gray-500">Start creating</div>
+  </div>
+  
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-colors">
+    <div class="text-sm text-gray-400 mb-2">Active Rules</div>
+    <div class="text-3xl font-bold text-green-400 mb-1">2</div>
+    <div class="text-sm text-gray-500">2 automation rules active</div>
+  </div>
+</div>
+
+<!-- Website Analysis -->
+<div class="bg-gray-900 rounded-xl p-6 border border-gray-800 mb-8">
+  <h2 class="text-xl font-semibold mb-4">Website Analysis</h2>
+  <form method="post" action="/ai-insights" id="analysisForm">
+    <div class="mb-4">
+      <label for="website" class="block text-sm font-medium text-gray-300 mb-2">Website URL</label>
+      <input 
+        type="url" 
+        id="website" 
+        name="website" 
+        class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+        placeholder="https://example.com" 
+        required
+      >
+    </div>
+    <button 
+      type="submit" 
+      class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+      id="analyzeBtn"
+    >
+      <span id="btnText">🚀 Analyze Website</span>
+      <span id="btnSpinner" class="hidden">⏳</span>
+    </button>
+  </form>
+</div>
+
+<!-- Quick Actions -->
+<div>
+  <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <a href="/ads-ai" class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10 group">
+      <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📢</div>
+      <h3 class="font-semibold mb-2">Generate Ad Copy</h3>
+      <p class="text-sm text-gray-400">Create high-converting ad copy with AI</p>
+    </a>
+    
+    <a href="/automation" class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10 group">
+      <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">⚙️</div>
+      <h3 class="font-semibold mb-2">Automation Rules</h3>
+      <p class="text-sm text-gray-400">Set up smart automation workflows</p>
+    </a>
+    
+    <a href="/ai-insights" class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10 group">
+      <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🔍</div>
+      <h3 class="font-semibold mb-2">View Insights</h3>
+      <p class="text-sm text-gray-400">See all your saved analyses</p>
+    </a>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.getElementById('analysisForm')?.addEventListener('submit', function(e) {
+    const btn = document.getElementById('analyzeBtn');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+    
+    btn.disabled = true;
+    btnText.classList.add('hidden');
+    btnSpinner.classList.remove('hidden');
+  });
+</script>
+{% endblock %}

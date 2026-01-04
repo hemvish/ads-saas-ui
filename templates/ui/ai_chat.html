@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="logo">victory<span>AI</span></div>
+    <ul>
+      <li class="active">AI Chat</li>
+      <li>Ad Generator</li>
+      <li>Optimization</li>
+      <li>Analytics</li>
+      <li>Creatives</li>
+      <li>Advanced</li>
+    </ul>
+    <div class="upgrade">
+      <p>Limited version</p>
+      <button>Upgrade Now</button>
+    </div>
+  </aside>
+
+  <main class="chat-area">
+    <h1>Hi Hemendra, what would you like to know?</h1>
+
+    <div class="prompt-box">
+      <input placeholder="Ask anything about your ads, budget, ROAS..." />
+      <button>➤</button>
+    </div>
+
+    <div class="quick-cards">
+      <div class="card">How did my ads perform this week?</div>
+      <div class="card">Which creatives drive most conversions?</div>
+      <div class="card">Where is my Meta Ads budget wasted?</div>
+      <div class="card">Which ads show fatigue?</div>
+      <div class="card">Campaigns with highest ROI?</div>
+      <div class="card">Any sudden performance drops?</div>
+    </div>
+  </main>
+</div>
+{% endblock %}

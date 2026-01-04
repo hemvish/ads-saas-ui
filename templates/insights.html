@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Victory AI</title>
+<style>
+body{background:#0b1220;color:#fff;font-family:Arial}
+.container{width:900px;margin:50px auto}
+input,button{width:100%;padding:14px;font-size:16px}
+button{background:#22c55e;border:none;margin-top:10px}
+.report{background:#020617;padding:20px;margin-top:20px;border-radius:8px}
+small{color:#94a3b8}
+pre{white-space:pre-wrap}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>🚀 Victory AI – Madgicx Style</h1>
+
+<form method="post" action="/ai-insights-stream">
+<input name="website" placeholder="https://madgicx.com/" required>
+<button>Analyze Website</button>
+</form>
+<form method="post" action="/ads-ai" style="margin-top:30px">
+<input name="website" placeholder="Website for Ads AI" required>
+<input name="goal" placeholder="Goal (leads/sales/app installs)">
+<input name="budget" placeholder="Budget (₹1000/day)">
+<button style="background:#3b82f6">Generate Ads AI</button>
+</form>
+
+<h2>Saved Reports</h2>
+
+{% for r in reports %}
+<div class="report">
+<small>{{r.time}} – {{r.website}}</small>
+<pre>{{r.result}}</pre>
+</div>
+{% endfor %}
+
+</div>
+</body>
+</html>

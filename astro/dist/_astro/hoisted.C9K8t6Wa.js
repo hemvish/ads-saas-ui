@@ -1,0 +1,1 @@
+import"https://cdn.tailwindcss.com";const t=localStorage.getItem("token");t||(window.location.href="/login");fetch("http://127.0.0.1:8000/api/dashboard",{headers:{Authorization:"Bearer "+t}}).then(o=>(o.status===401&&(localStorage.removeItem("token"),window.location.href="/login"),o.json())).then(o=>{console.log("Dashboard Data:",o)});

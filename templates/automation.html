@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Automation Rules – Victory AI{% endblock %}
+
+{% block page_title %}Automation Rules{% endblock %}
+
+{% block header_actions %}
+<button 
+  onclick="document.getElementById('createModal').classList.remove('hidden')" 
+  class="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+>
+  + Create Rule
+</button>
+{% endblock %}
+
+{% block content %}
+
+<!-- Create Modal -->
+<div id="createModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-gray-900 rounded-xl border border-gray-800 p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold">Create Automation Rule</h2>
+      <button onclick="document.getElementById('createModal').classList.add('hidden')" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+    </div>
+    <form method="post" action="/automation/create" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Rule Name</label>
+        <input type="text" name="name" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
+        <textarea name="description" rows="3" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Trigger Type</label>
+        <select name="trigger_type" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+          <option value="website_score">Website Score</option>
+          <option value="ad_performance">Ad Performance</option>
+          <option value="time_based">Time Based</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Condition Key</label>
+          <input type="text" name="condition_key" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Operator</label>
+          <select name="condition_operator" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+            <option value="equals">Equals</option>
+            <option value="greater_than">Greater Than</option>
+            <option value="less_than">Less Than</option>
+            <option value="contains">Contains</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Value</label>
+          <input type="text" name="condition_value" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Action Type</label>
+          <select name="action_type" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+            <option value="pause_campaign">Pause Campaign</option>
+            <option value="increase_budget">Increase Budget</option>
+            <option value="send_notification">Send Notification</option>
+            <option value="create_report">Create Report</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">Action Value</label>
+          <input type="text" name="action_value" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+        </div>
+      </div>
+      <div class="flex gap-4 pt-4">
+        <button type="submit" class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200">Create Rule</button>
+        <button type="button" onclick="document.getElementById('createModal').classList.add('hidden')" class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold py-3 px-6 rounded-lg transition-colors">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Rules List -->
+<div class="space-y-4">
+  {% if rules %}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {% for rule in rules %}
+      <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-start gap-4 flex-1">
+            <div class="text-2xl">⚙️</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="font-semibold text-lg">{{ rule.name }}</h3>
+                <span class="px-2 py-1 text-xs font-medium rounded {% if rule.enabled %}bg-green-500/20 text-green-400{% else %}bg-gray-700 text-gray-400{% endif %}">
+                  {% if rule.enabled %}Active{% else %}Inactive{% endif %}
+                </span>
+              </div>
+              {% if rule.description %}
+              <p class="text-sm text-gray-400 mb-3">{{ rule.description }}</p>
+              {% endif %}
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" {% if rule.enabled %}checked{% endif %} onchange="this.closest('form').submit()" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-purple-600 peer-checked:to-blue-600"></div>
+          </label>
+          <form method="post" action="/automation/{{ rule.id }}/toggle" class="hidden">
+            <button type="submit"></button>
+          </form>
+        </div>
+        <div class="space-y-2 text-sm border-t border-gray-800 pt-4">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Trigger:</span>
+            <span class="text-gray-300">{{ rule.trigger_type }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Condition:</span>
+            <span class="text-gray-300">{{ rule.trigger_conditions.key }} {{ rule.trigger_conditions.operator }} {{ rule.trigger_conditions.value }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Action:</span>
+            <span class="text-gray-300">{{ rule.actions[0].type if rule.actions else 'N/A' }}</span>
+          </div>
+        </div>
+        <form method="post" action="/automation/{{ rule.id }}/delete" class="mt-4 pt-4 border-t border-gray-800">
+          <button type="submit" onclick="return confirm('Delete this rule?')" class="w-full bg-gray-800 hover:bg-red-600/20 hover:border-red-500/50 text-gray-400 hover:text-red-400 font-medium py-2 px-4 rounded-lg border border-gray-700 transition-colors">
+            Delete Rule
+          </button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="bg-gray-900 rounded-xl p-12 border border-gray-800 text-center">
+      <div class="text-6xl mb-4">⚙️</div>
+      <h3 class="text-xl font-semibold mb-2">No automation rules yet</h3>
+      <p class="text-gray-400 mb-6">Create your first automation rule to get started</p>
+      <button onclick="document.getElementById('createModal').classList.remove('hidden')" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]">
+        Create Your First Rule
+      </button>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

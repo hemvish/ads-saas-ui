@@ -1,0 +1,57 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout pageTitle="Dashboard" pageSubtitle="Your AI Ads Overview">
+
+  <!-- REQUIRED DOM TARGET -->
+  <div id="dashboardContent"></div>
+
+  <script>
+    const dashboardEl = document.getElementById("dashboardContent");
+    const token = localStorage.getItem("token");
+
+    // 🔐 Auth Guard
+    if (!token) {
+      window.location.href = "/login";
+    }
+
+    async function loadDashboard() {
+      if (!dashboardEl) return;
+
+      try {
+        const res = await fetch(
+          "http://127.0.0.1:8000/api/dashboard/stats",
+          {
+            headers: {
+              Authorization: "Bearer " + token
+            }
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error("Unauthorized");
+        }
+
+        const data = await res.json();
+
+        dashboardEl.innerHTML = `
+          <div class="bg-[#020617] border border-gray-700 p-6 rounded-xl">
+            <h2 class="text-xl font-bold text-green-400 mb-2">
+              Dashboard Stats
+            </h2>
+            <pre class="text-sm text-gray-300">
+${JSON.stringify(data, null, 2)}
+            </pre>
+          </div>
+        `;
+      } catch (err) {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
+    }
+
+    loadDashboard();
+  </script>
+
+</Layout>

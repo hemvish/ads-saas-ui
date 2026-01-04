@@ -1,0 +1,70 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout pageTitle="Login" pageSubtitle="Access your AI Ads dashboard">
+
+  <form id="loginForm" class="max-w-md space-y-4">
+    <input
+      id="email"
+      type="email"
+      placeholder="Email"
+      required
+      class="w-full bg-[#020617] border border-gray-700 p-3 rounded"
+    />
+
+    <button
+      type="submit"
+      class="w-full bg-green-600 hover:bg-green-700 p-3 rounded"
+    >
+      Login
+    </button>
+
+    <p id="error" class="text-red-500 text-sm"></p>
+  </form>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const errorEl = document.getElementById("error");
+
+    if (
+      form instanceof HTMLFormElement &&
+      emailInput instanceof HTMLInputElement &&
+      errorEl instanceof HTMLElement
+    ) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorEl.innerText = "";
+
+        try {
+          const res = await fetch("http://127.0.0.1:8000/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: emailInput.value
+            })
+          });
+
+          if (!res.ok) {
+            throw new Error("Login failed");
+          }
+
+          const data = await res.json();
+
+          // ✅ SAVE TOKEN
+          localStorage.setItem("token", data.access_token);
+
+          // ✅ REDIRECT
+          window.location.href = "/dashboard";
+
+        } catch (err) {
+          errorEl.innerText = "Invalid login";
+        }
+      });
+    }
+  </script>
+
+</Layout>

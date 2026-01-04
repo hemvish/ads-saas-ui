@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+import StatCard from "../components/StatCard.astro";
+import DashboardCharts from "../components/charts/DashboardCharts.jsx";
+
+const token = Astro.request.headers.get("cookie")?.includes("token")
+  ? null
+  : null;
+---
+
+<Layout pageTitle="Dashboard" pageSubtitle="Overview of your marketing performance">
+    <div id="dashboard"></div>
+  
+    <script>
+      const token = localStorage.getItem("token");
+  
+      if (!token) {
+        window.location.href = "/login";
+      }
+  
+      fetch("http://127.0.0.1:8000/api/dashboard", {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      })
+      .then(res => {
+        if (res.status === 401) {
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log("Dashboard Data:", data);
+      });
+    </script>
+  </Layout>
+  

@@ -1,0 +1,63 @@
+---
+---
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+  <!-- Revenue Chart -->
+  <div class="lg:col-span-2 bg-[#1A1F35] border border-gray-800 rounded-xl p-6">
+    <h3 class="text-white font-semibold mb-4">Revenue Overview</h3>
+    <canvas id="revenueChart" height="120"></canvas>
+  </div>
+
+  <!-- Performance Chart -->
+  <div class="bg-[#1A1F35] border border-gray-800 rounded-xl p-6">
+    <h3 class="text-white font-semibold mb-4">Performance Metrics</h3>
+    <canvas id="performanceChart" height="160"></canvas>
+  </div>
+</div>
+
+<script type="module">
+  import Chart from "chart.js/auto";
+
+  const revenueCtx = document.getElementById("revenueChart");
+  const performanceCtx = document.getElementById("performanceChart");
+
+  new Chart(revenueCtx, {
+    type: "line",
+    data: {
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      datasets: [{
+        label: "Revenue (₹)",
+        data: [12, 19, 14, 22, 30, 25, 34],
+        borderColor: "#6366f1",
+        backgroundColor: "rgba(99,102,241,0.2)",
+        tension: 0.4,
+        fill: true
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: "#9ca3af" }, grid: { color: "#1f2937" } },
+        y: { ticks: { color: "#9ca3af" }, grid: { color: "#1f2937" } }
+      }
+    }
+  });
+
+  new Chart(performanceCtx, {
+    type: "bar",
+    data: {
+      labels: ["CTR", "ROAS", "CPA"],
+      datasets: [{
+        data: [3.4, 4.8, 1.2],
+        backgroundColor: ["#22c55e", "#6366f1", "#f59e0b"]
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: "#9ca3af" }, grid: { display: false } },
+        y: { ticks: { color: "#9ca3af" }, grid: { color: "#1f2937" } }
+      }
+    }
+  });
+</script>

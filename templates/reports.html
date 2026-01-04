@@ -1,0 +1,48 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Saved Reports – Victory AI{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-between items-center mb-8">
+  <h2 class="text-2xl font-bold">Saved Reports</h2>
+  <div class="text-sm text-slate-400">
+    {{ reports|length }} report{{ 's' if reports|length != 1 else '' }}
+  </div>
+</div>
+
+{% if reports %}
+<div class="space-y-4">
+  {% for report in reports %}
+  <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 hover:bg-slate-800 transition">
+    <div class="flex justify-between items-start">
+      <div class="flex-1">
+        <div class="flex items-center gap-3 mb-2">
+          <h3 class="text-lg font-semibold">{{ report.title or report.website }}</h3>
+          <span class="px-2 py-1 text-xs rounded bg-indigo-900 text-indigo-300">
+            {{ report.report_type }}
+          </span>
+        </div>
+        <p class="text-sm text-slate-400 mb-3">{{ report.website }}</p>
+        <div class="text-sm text-slate-500">
+          Created: {{ report.created_at[:19] if report.created_at else 'N/A' }}
+        </div>
+      </div>
+      <a href="/reports/{{ report.id }}" 
+         class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg text-sm font-semibold">
+        View Report
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="bg-slate-900 rounded-xl p-12 text-center border border-slate-800">
+  <p class="text-slate-400 mb-4">No reports saved yet</p>
+  <a href="/grinder" class="inline-block bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg text-sm font-semibold">
+    Create Your First Report
+  </a>
+</div>
+{% endif %}
+
+{% endblock %}

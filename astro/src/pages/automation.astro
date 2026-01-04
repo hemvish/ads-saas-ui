@@ -1,0 +1,75 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  pageTitle="Automation Rules"
+  pageSubtitle="Create intelligent automation rules"
+>
+  <div class="max-w-2xl bg-[#020617] border border-gray-800 rounded-xl p-6 space-y-4">
+
+    <form id="ruleForm" class="space-y-4">
+      <input
+        id="metric"
+        placeholder="Metric (CPA, ROAS, CTR)"
+        class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+        required
+      />
+
+      <input
+        id="condition"
+        placeholder="Condition (< 300, > 2)"
+        class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+        required
+      />
+
+      <input
+        id="action"
+        placeholder="Action (Increase Budget, Pause Ads)"
+        class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+        required
+      />
+
+      <button
+        class="w-full bg-green-600 hover:bg-green-700 p-2 rounded"
+      >
+        Save Rule
+      </button>
+    </form>
+
+    <pre id="result" class="hidden text-sm text-gray-300 bg-black p-4 rounded"></pre>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "/login";
+
+    const form = document.getElementById("ruleForm");
+    const result = document.getElementById("result");
+
+    if (form && result) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const metric = (document.getElementById("metric") as HTMLInputElement).value;
+        const condition = (document.getElementById("condition") as HTMLInputElement).value;
+        const action = (document.getElementById("action") as HTMLInputElement).value;
+
+        result.classList.add("hidden");
+
+        const data = { metric, condition, action };
+
+        result.innerText = JSON.stringify(
+          {
+            status: "Rule saved (MVP)",
+            rule: data
+          },
+          null,
+          2
+        );
+
+        result.classList.remove("hidden");
+      });
+    }
+  </script>
+</Layout>

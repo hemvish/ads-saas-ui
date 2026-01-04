@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}AI Ads Generator – Victory AI{% endblock %}
+
+{% block page_title %}AI Ads Generator{% endblock %}
+
+{% block header_actions %}
+<a href="/" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors">
+  Back to Dashboard
+</a>
+{% endblock %}
+
+{% block content %}
+
+<!-- Input Form -->
+<div class="bg-gray-900 rounded-xl p-6 border border-gray-800 mb-8">
+  <h2 class="text-xl font-semibold mb-4">Generate High-Converting Ads</h2>
+  <form method="post" action="/generate-ads" id="adsForm">
+    <div class="space-y-4">
+      <div>
+        <label for="ads-website" class="block text-sm font-medium text-gray-300 mb-2">Website URL</label>
+        <input 
+          type="url" 
+          id="ads-website" 
+          name="website" 
+          class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+          placeholder="https://example.com" 
+          required
+          value="{{ website if website }}"
+        >
+      </div>
+      
+      <div>
+        <label for="ads-product" class="block text-sm font-medium text-gray-300 mb-2">Product / Service</label>
+        <input 
+          type="text" 
+          id="ads-product" 
+          name="product" 
+          class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+          placeholder="e.g., SaaS Platform, E-commerce Store"
+          required
+          value="{{ product if product }}"
+        >
+      </div>
+      
+      <div>
+        <label for="ads-budget" class="block text-sm font-medium text-gray-300 mb-2">Daily Budget</label>
+        <input 
+          type="text" 
+          id="ads-budget" 
+          name="budget" 
+          class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+          placeholder="e.g., $100/day"
+          required
+          value="{{ budget if budget }}"
+        >
+      </div>
+    </div>
+    
+    <button 
+      type="submit" 
+      class="w-full mt-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+      id="generateAdsBtn"
+    >
+      <span id="adsBtnText">✨ Generate Ad Copy</span>
+      <span id="adsBtnSpinner" class="hidden">⏳</span>
+    </button>
+  </form>
+</div>
+
+<!-- Output Cards -->
+<div id="adsOutput" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 {% if not ads_result %}hidden{% endif %}">
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10">
+    <h3 class="font-semibold mb-3 flex items-center gap-2">
+      <span class="text-xl">📝</span>
+      Ad Headlines
+    </h3>
+    <div class="text-sm text-gray-400 whitespace-pre-wrap">
+      {% if headlines %}{{ headlines }}{% else %}<div class="flex gap-1 justify-center py-4"><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-75"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-150"></div></div>{% endif %}
+    </div>
+  </div>
+
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10">
+    <h3 class="font-semibold mb-3 flex items-center gap-2">
+      <span class="text-xl">✍️</span>
+      Primary Text
+    </h3>
+    <div class="text-sm text-gray-400 whitespace-pre-wrap">
+      {% if primary_text %}{{ primary_text }}{% else %}<div class="flex gap-1 justify-center py-4"><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-75"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-150"></div></div>{% endif %}
+    </div>
+  </div>
+
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10">
+    <h3 class="font-semibold mb-3 flex items-center gap-2">
+      <span class="text-xl">🎯</span>
+      CTA
+    </h3>
+    <div class="text-sm text-gray-400">
+      {% if cta %}{{ cta }}{% else %}<div class="flex gap-1 justify-center py-4"><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-75"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-150"></div></div>{% endif %}
+    </div>
+  </div>
+
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10">
+    <h3 class="font-semibold mb-3 flex items-center gap-2">
+      <span class="text-xl">👥</span>
+      Target Audience
+    </h3>
+    <div class="text-sm text-gray-400">
+      {% if target_audience %}{{ target_audience }}{% else %}<div class="flex gap-1 justify-center py-4"><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-75"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-150"></div></div>{% endif %}
+    </div>
+  </div>
+
+  <div class="bg-gray-900 rounded-xl p-6 border border-gray-800 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/10">
+    <h3 class="font-semibold mb-3 flex items-center gap-2">
+      <span class="text-xl">💡</span>
+      Creative Angle
+    </h3>
+    <div class="text-sm text-gray-400">
+      {% if creative_angle %}{{ creative_angle }}{% else %}<div class="flex gap-1 justify-center py-4"><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-75"></div><div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-150"></div></div>{% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.getElementById('adsForm')?.addEventListener('submit', function(e) {
+    const btn = document.getElementById('generateAdsBtn');
+    const btnText = document.getElementById('adsBtnText');
+    const btnSpinner = document.getElementById('adsBtnSpinner');
+    const outputSection = document.getElementById('adsOutput');
+    
+    btn.disabled = true;
+    btnText.classList.add('hidden');
+    btnSpinner.classList.remove('hidden');
+    
+    if (outputSection) {
+      outputSection.classList.remove('hidden');
+      setTimeout(() => {
+        outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  });
+</script>
+{% endblock %}

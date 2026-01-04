@@ -1,0 +1,160 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  pageTitle="AI Decision"
+  pageSubtitle="Get intelligent recommendations for your ads"
+>
+  <div class="max-w-2xl bg-[#020617] border border-gray-700 rounded-xl p-6 space-y-4">
+
+    <!-- FORM -->
+    <form id="aiForm" class="space-y-4">
+
+      <input
+        id="platform"
+        placeholder="Platform (Facebook / Google)"
+        class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+        required
+      />
+
+      <input
+        id="budget"
+        type="number"
+        placeholder="Daily Budget"
+        class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+        required
+      />
+
+      <input
+        id="objective"
+        placeholder="Objective (Leads / Sales / Traffic)"
+        class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+        required
+      />
+
+      <button
+        type="submit"
+        class="w-full bg-green-600 hover:bg-green-700 p-2 rounded"
+      >
+        Get AI Decision
+      </button>
+
+      <p id="error" class="text-red-500 text-sm"></p>
+    </form>
+
+    <!-- RESULT -->
+    <pre
+      id="result"
+      class="hidden text-sm text-gray-300 bg-[#020617] border border-gray-700 p-4 rounded"
+    ></pre>
+  </div>
+
+  ---
+  import Layout from "../layouts/Layout.astro";
+  ---
+  
+  <Layout
+    pageTitle="AI Decision"
+    pageSubtitle="Get intelligent recommendations for your ads"
+  >
+    <div class="max-w-2xl bg-[#020617] border border-gray-700 rounded-xl p-6 space-y-4">
+  
+      <!-- FORM -->
+      <form id="aiForm" class="space-y-4">
+  
+        <input
+          id="platform"
+          placeholder="Platform (Facebook / Google)"
+          class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+          required
+        />
+  
+        <input
+          id="budget"
+          type="number"
+          placeholder="Daily Budget"
+          class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+          required
+        />
+  
+        <input
+          id="objective"
+          placeholder="Objective (Leads / Sales / Traffic)"
+          class="w-full bg-[#020617] border border-gray-700 p-2 rounded"
+          required
+        />
+  
+        <button
+          type="submit"
+          class="w-full bg-green-600 hover:bg-green-700 p-2 rounded"
+        >
+          Get AI Decision
+        </button>
+  
+        <p id="error" class="text-red-500 text-sm"></p>
+      </form>
+  
+      <!-- RESULT -->
+      <pre
+        id="result"
+        class="hidden text-sm text-gray-300 bg-[#020617] border border-gray-700 p-4 rounded"
+      ></pre>
+    </div>
+  
+    <script>
+      const form = document.getElementById("aiForm");
+      const errorEl = document.getElementById("error");
+      const resultEl = document.getElementById("result");
+      const token = localStorage.getItem("token");
+  
+      // 🔐 Auth Guard
+      if (!token) {
+        window.location.href = "/login";
+      }
+  
+      if (form && errorEl && resultEl) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+  
+          errorEl.innerText = "";
+          resultEl.classList.add("hidden");
+  
+          const platform = (document.getElementById("platform") as HTMLInputElement).value;
+const budget = (document.getElementById("budget") as HTMLInputElement).value;
+const objective = (document.getElementById("objective") as HTMLInputElement).value;
+
+  
+          try {
+            const res = await fetch("http://127.0.0.1:8000/ai/decision", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token
+              },
+              body: JSON.stringify({
+                platform,
+                budget,
+                objective
+              })
+            });
+  
+            if (!res.ok) {
+              throw new Error("AI request failed");
+            }
+  
+            const data = await res.json();
+  
+            resultEl.innerText = JSON.stringify(data, null, 2);
+            resultEl.classList.remove("hidden");
+  
+          } catch (err) {
+            errorEl.innerText = "Unable to get AI decision";
+            console.error(err);
+          }
+        });
+      }
+    </script>
+  </Layout>
+  
+

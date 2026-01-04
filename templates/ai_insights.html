@@ -1,0 +1,99 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}AI Insights – Victory AI{% endblock %}
+
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-8">AI Website Analysis</h2>
+
+<!-- WEBSITE ANALYSIS FORM -->
+<div class="bg-slate-900 rounded-xl p-6 mb-8 border border-slate-800">
+  <form method="post" action="/ai-insights" class="space-y-4">
+    <div>
+      <label class="block text-sm text-slate-400 mb-2">Website URL</label>
+      <input type="url" name="website" 
+             placeholder="https://example.com" 
+             required
+             class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <button type="submit" 
+            class="w-full bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-lg font-semibold">
+      🧠 Analyze Website
+    </button>
+  </form>
+</div>
+
+<!-- RESULTS -->
+{% if result %}
+<div class="bg-slate-900 rounded-xl p-6 mb-8 border border-slate-800">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-lg font-semibold">Analysis Results</h3>
+    <span class="text-sm text-slate-400">{{ website }}</span>
+  </div>
+  <div class="bg-slate-950 rounded-lg p-6">
+    <pre class="text-sm whitespace-pre-wrap text-slate-300">{{ result }}</pre>
+  </div>
+  <div class="mt-4 flex gap-4">
+    <a href="/automation" class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg text-sm font-semibold">
+      ⚙️ Create Automation Rule
+    </a>
+    <a href="/reports" class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-semibold">
+      📊 View All Reports
+    </a>
+  </div>
+</div>
+
+<!-- AD COPY GENERATION -->
+<div class="bg-slate-900 rounded-xl p-6 mb-8 border border-slate-800">
+  <h3 class="text-lg font-semibold mb-4">📢 Generate Ad Copy</h3>
+  <form method="post" action="/generate-ads" class="space-y-4">
+    <input type="hidden" name="website" value="{{ website }}">
+    <div>
+      <label class="block text-sm text-slate-400 mb-2">Product / Service</label>
+      <input type="text" name="product" 
+             placeholder="e.g., SaaS Platform, E-commerce Store" 
+             required
+             class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <div>
+      <label class="block text-sm text-slate-400 mb-2">Daily Budget</label>
+      <input type="text" name="budget" 
+             placeholder="e.g., $100/day or ₹5000/day" 
+             required
+             class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <button type="submit" 
+            class="w-full bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold">
+      Generate Ad Copy
+    </button>
+  </form>
+</div>
+{% endif %}
+
+<!-- RECENT REPORTS -->
+{% if reports %}
+<div class="bg-slate-900 rounded-xl p-6 border border-slate-800">
+  <h3 class="text-lg font-semibold mb-4">📂 Recent Reports</h3>
+  <div class="space-y-3">
+    {% for r in reports %}
+    <div class="bg-slate-800 rounded-lg p-4 flex justify-between items-center">
+      <div>
+        <p class="font-semibold text-sm">{{ r.website }}</p>
+        <p class="text-xs text-slate-400">{{ r.created_at[:19] if r.created_at else 'N/A' }}</p>
+      </div>
+      <a href="/reports/{{ r.id }}" 
+         class="text-indigo-400 hover:text-indigo-300 text-sm font-semibold">
+        View →
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="mt-4 pt-4 border-t border-slate-800">
+    <a href="/reports" class="text-indigo-400 hover:text-indigo-300 text-sm font-semibold">
+      View All Reports →
+    </a>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,7 @@
+requests
+python-multipart
+fastapi
+uvicorn
+python-jose
+passlib[bcrypt]
+

@@ -1,0 +1,17 @@
+---
+const { page = "dashboard" } = Astro.props;
+---
+
+<nav class="top-nav">
+  <a href="/">Dashboard</a>
+  <a href="/ads-ai">Ads AI</a>
+  <a href="/ai-insights">AI Insights</a>
+  <a href="/automation">Automation</a>
+</nav>
+
+<main style="padding:40px">
+  {page === "dashboard" && <h1>🚀 Dashboard</h1>}
+  {page === "ads-ai" && <h1>🤖 Ads AI Generator</h1>}
+  {page === "ai-insights" && <h1>📊 AI Insights</h1>}
+  {page === "automation" && <h1>⚙️ Automation Rules</h1>}
+</main>
