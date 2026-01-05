@@ -1,17 +1,15 @@
 from fastapi import FastAPI
-
-from routers.auth import router as auth_router
-from routers.dashboard import router as dashboard_router
-from routers.ai_decision import router as ai_router
 from fastapi.middleware.cors import CORSMiddleware
 
-
-
+from backend.routers.auth import router as auth_router
+from backend.routers.security import router as security_router
+from backend.routers.automation import router as automation_router
 
 app = FastAPI(
     title="AI Ads Decision Engine",
     version="1.0.0"
 )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,9 +19,9 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
-app.include_router(dashboard_router, prefix="/api/dashboard", tags=["Dashboard"])
-app.include_router(ai_router, prefix="/ai", tags=["AI Decision"])
+app.include_router(security_router, prefix="/security", tags=["Security"])
+app.include_router(automation_router, prefix="/automation", tags=["Automation"])
 
 @app.get("/")
 def root():
-    return {"status": "API Running"}
+    return {"status": "API is running"}
